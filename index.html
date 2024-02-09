@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>¡Bienvenido al Bingo!</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="main-container">
+    <h1>¡Bienvenido al Bingo!</h1>
+    <div id="form-container" class = "visible">
+      <h2>Ingresa tu nombre y selecciona la cantidad de cartones:</h2>
+      <form id="form-jugadores" class="visible" onsubmit="return ocultar()">
+        <label for="nombre-jugador-1">Jugador 1:</label>
+        <input type="text" id="nombre-jugador-1" name="nombre-jugador-1" required>
+        <label for="nombre-jugador-2">Jugador 2:</label>
+        <input type="text" id="nombre-jugador-2" name="nombre-jugador-2" required>
+        <label for="nombre-jugador-3">Jugador 3:</label>
+        <input type="text" id="nombre-jugador-3" name="nombre-jugador-3" required>
+        <label for="nombre-jugador-4">Jugador 4:</label>
+        <input type="text" id="nombre-jugador-4" name="nombre-jugador-4" required>
+        <br>
+        <label for="tamano-carton">Tamaño Cartón:</label>
+        <select id="tamano-carton" name="tamano-carton">
+          <option value=3>3x3</option>
+          <option value=4>4x4</option>
+          <option value=5>5x5</option>
+        </select>
+        <br>
+        <button id= "botonComenzar" type="submit">¡Comenzar partida!</button>
+      </form>
+    </div>
+    <button id="btn-generar-numero" class ="oculto boton" onclick="generarNumero()">Generar número</button>
+    <span id="numero-generado" class="oculto span"></span>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
