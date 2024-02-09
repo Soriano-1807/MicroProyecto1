@@ -97,7 +97,7 @@ body {
         
         position: absolute;
         left: 50%;
-        top: 50%;
+        top: 30%;
         transform: translate(-50%, -50%);
       }
 
@@ -105,6 +105,38 @@ body {
         font-size: 20px;
         position: absolute;
         left: 50%;
-        top: 30%;
+        top: 20%;
         transform: translate(-50%, -50%);
       }
+
+      .containercartones{
+        position: absolute;
+        left: 50%;
+        top: 55%;
+        transform: translate(-50%, -50%);
+      }
+
+      #cartones-container select {
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+      }
+
+      #cartones-container label {
+        position: absolute;
+        left: 72.5%;
+        top: -40%;
+        transform: translate(-50%, -50%);
+        display: block;
+        width: 100%;
+        
+        
+      }
+
+      
+        
+        
+        
+      
+      

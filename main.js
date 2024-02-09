@@ -1,7 +1,9 @@
 const botonComenzar = document.getElementById("botonComenzar");
 
+//mult tamano de carton con querysel
 multCarton = document.getElementById("form-jugadores").querySelector("#tamano-carton");
 
+//ocultar "objetos" pag mostrada inicialmente
 function ocultar(){
     const formulario = document.getElementById("form-jugadores");
     const div = document.getElementById("form-container");
@@ -14,6 +16,7 @@ function ocultar(){
     return false;
 }
 
+//funcion obtener nombre d elos jugadores del form
 function obtenerNombres(){
     var nombreJugador1 = document.getElementById("nombre-jugador-1").value;
     var nombreJugador2 = document.getElementById("nombre-jugador-2").value;
@@ -24,27 +27,39 @@ function obtenerNombres(){
     return nombresJugadores;
 }
 
+
 const btnGen = document.getElementById("btn-generar-numero");
 const numGen = document.getElementById("numero-generado");
+const cartones = document.getElementById("cartones-container");
 
-function mostrar(){
-    
+//mostrar "objetos" despues de comenzar la partida
+function mostrar(){   
     btnGen.classList.remove("oculto");
     btnGen.classList.add("visible");
     numGen.classList.remove("oculto");
     numGen.classList.add("visible");
+    cartones.classList.remove("oculto")
+    cartones.classList.add("visible");
     return false;
 }
 
-
+//funcion generar carton genera los numeros de cartones de bingo sin repetirse y de manera aleatoria entre el 1 y el 50
 function generarCarton(tamanocarton) {
     const carton = [];
-    for (let i = 0; i < tamanocarton; i++) {
-      carton.push(Math.floor(Math.random() * 50) + 1);
+    const usados = new Set();
+
+    while (carton.length < tamanocarton) {
+      const numero = Math.floor(Math.random() * 50) + 1;
+
+      if (!usados.has(numero)){
+        carton.push(numero);
+        usados.add(numero);
+      }
     }
     return carton;
   }
 
+  //con la funcion anterior, genera 4 cartones, uno para cada jugador y crea una array de 4 espacios donde mete cada carton de bingo que tambien sera un array del tamano seleccionado por el usuario
 function generarCartones() {
     const cartones = [];
     for (let i = 0; i < 4; i++) {
@@ -53,7 +68,26 @@ function generarCartones() {
     return cartones;
   }
 
+//esta funcion genera una lista de 25 numeros (uno por cada turno) de numeros aleatorios sin repetirse entre el 1 y 3l 50 que seran los numeros del bingo
+function generarNumerosBingo(){
+    const numeros = [];
+    const numerosUsados = new Set();
 
+    while (numeros.length < 25) {
+    const numeroGen = Math.floor(Math.random() * 50) + 1;
+
+    if (!numerosUsados.has(numeroGen)){
+        numeros.push(numeroGen);
+        numerosUsados.add(numeroGen);
+    }
+    }
+    return numeros;
+}
+
+var numerosBingo = generarNumerosBingo();
+
+//este boton guardara en una lista los nombres de los jugadores, guardara en un diccionario los datos de cada jugador, mostrara los objetos a mostrar despues de presionar el boton de comenzar,
+//y se guardara en una variable la lista de listas de los cartones
 botonComenzar.addEventListener('click', function() {
     nombresJugadores = obtenerNombres()
     window.alert(nombresJugadores);
@@ -87,6 +121,7 @@ botonComenzar.addEventListener('click', function() {
       //window.alert(jugadores[0].nombre);
       mostrar()
       Cartones = generarCartones();
+      window.alert(numerosBingo)
       window.alert(Cartones[0]);
       window.alert(Cartones[1]);
       window.alert(Cartones[2]);
@@ -96,24 +131,26 @@ botonComenzar.addEventListener('click', function() {
 });
 
 
-
-var numeroGenerado = 0;
+var i = 24
 var pulsacionesRestantes = 25;
 
+//esta es la funcion que se llamara cada vez que el usuario presione generar numero, que a su vez mostrara el numero generado y se podra pulsar un max de 25 veces
 function generarNumero() {
-  if (pulsacionesRestantes > 0) {
-    numeroGenerado = Math.floor(Math.random() * 50) + 1;
-    numGen.textContent = numeroGenerado;
+  if (pulsacionesRestantes > 0) {   
+    numGen.textContent = numerosBingo[i];
     btnGen.textContent = pulsacionesRestantes;
+
   } else {
     btnGen.textContent = "Turnos Agotados";
   }
 }
 
+
 btnGen.addEventListener('click', function() {
 
     pulsacionesRestantes--;
     generarNumero();
+    i--;
     
 });
 
