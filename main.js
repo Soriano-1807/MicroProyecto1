@@ -46,8 +46,6 @@ function mostrar(){
     numGen.classList.add("visible");
     cartones.classList.remove("oculto")
     cartones.classList.add("visible");
-    cartonBingo.classList.remove("oculto")
-    cartonBingo.classList.add("visible");
 
     return false;
 }
@@ -114,68 +112,11 @@ function convListaMat(lista,multCarton) {
     return matriz;
   }
 
-//funcion que me devuelve una lista con todas las filas de una matriz sin importar size
-function obtenerFilasMatriz(matriz) {
-
-    const filas = [];
-    for (const fila of matriz) {
-      filas.push(fila);
-    }
-  
-    return filas;
-}
-
-//funcion que me devuelve una lista con todas las columnas de una matriz 
-function obtenerColumnasMatriz(matriz) {
-  
-    const filas = matriz.length;
-    const columnas = [];
-  
-    // Recorrer las columnas
-    for (let i = 0; i < filas; i++) {
-      columnas.push([]);
-  
-      // Recorrer las filas de la columna actual
-      for (let j = 0; j < filas; j++) {
-        columnas[i].push(matriz[j][i]);
-      }
-    }
-  
-    return columnas;
-
-  }
-
-//funcion que me devuelve lista con todas las diagonales de una matriz 
-function obtenerDiagMat(matriz){
-
-    const filas = matriz.length;
-    const columnas = matriz[0].length;
-    const diagonalPrincipal = [];
-    const diagonalSecundaria = [];
-  
-    // Diagonal principal
-    for (let i = 0; i < filas ; i++) {
-      diagonalPrincipal.push(matriz[i][i]);
-    }
-  
-    // Diagonal secundaria
-    for (let i = 0; i < filas; i++) {
-      diagonalSecundaria.push(matriz[i][columnas - 1 - i]);
-    }
-  
-    return [diagonalPrincipal, diagonalSecundaria];
-  }
-
-
 //este boton guardara en una lista los nombres de los jugadores, guardara en un diccionario los datos de cada jugador, mostrara los objetos a mostrar despues de presionar el boton de comenzar,
 //y se guardara en una variable la lista de listas de los cartones
 botonComenzar.addEventListener('click', function() {
     nombresJugadores = obtenerNombres()
-    window.alert(nombresJugadores);
     Cartones = generarCartones();
-    window.alert(Cartones[0])
-    window.alert(convListaMat(Cartones[0],multCarton.value)[1])
-
 
     jugadores = [
         {
@@ -184,9 +125,6 @@ botonComenzar.addEventListener('click', function() {
           victorias: 0,
           puntaje: 0,
           carton: Cartones[0],
-          filas: filasJug1 = obtenerFilasMatriz(convListaMat(Cartones[0],multCarton.value)),
-          columnas: colJug1 = obtenerColumnasMatriz(convListaMat(Cartones[0],multCarton.value)),
-          diagonales: diagJug1 = obtenerDiagMat(convListaMat(Cartones[0],multCarton.value)),
         },
         {
           nombre: nombresJugadores[1],
@@ -194,9 +132,6 @@ botonComenzar.addEventListener('click', function() {
           victorias: 0,
           puntaje: 0,
           carton: Cartones[1],
-          filas: filasJug2 =  obtenerFilasMatriz(convListaMat(Cartones[1],multCarton.value)),
-          columnas: colJug2 = obtenerColumnasMatriz(convListaMat(Cartones[1],multCarton.value)),
-          diagonales: diagJug2 = obtenerDiagMat(convListaMat(Cartones[1],multCarton.value)),
         },
         {
             nombre: nombresJugadores[2],
@@ -204,9 +139,6 @@ botonComenzar.addEventListener('click', function() {
             victorias: 0,
             puntaje: 0,
             carton:Cartones[2],
-            filas: filasJug3 = obtenerFilasMatriz(convListaMat(Cartones[2],multCarton.value)),
-            columnas: colJug3 = obtenerColumnasMatriz(convListaMat(Cartones[2],multCarton.value)),
-            diagonales: diagJug3 = obtenerDiagMat(convListaMat(Cartones[2],multCarton.value)),
         },
         {
             nombre: nombresJugadores[3],
@@ -214,22 +146,10 @@ botonComenzar.addEventListener('click', function() {
             victorias: 0,
             puntaje: 0,
             carton: Cartones[3],
-            filas: filasJug4 = obtenerFilasMatriz(convListaMat(Cartones[3],multCarton.value)),
-            columnas: colJug4 = obtenerColumnasMatriz(convListaMat(Cartones[3],multCarton.value)),
-            diagonales: diagJug4 = obtenerDiagMat(convListaMat(Cartones[3],multCarton.value)),
         },
         
       ]
       mostrar();
-      /*window.alert(jugadores[0].carton)
-      window.alert(jugadores[0].filas)
-      window.alert(jugadores[0].columnas)
-      window.alert(jugadores[0].diagonales)
-      window.alert(jugadores[3].carton)
-      window.alert(jugadores[3].filas)
-      window.alert(jugadores[3].columnas)
-      window.alert(jugadores[3].diagonales)*/
-
       
     }
     
@@ -251,23 +171,97 @@ function generarNumero() {
   }
 }
 
-//TURNOS BINGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO//
+//PUNTUAR MATRIZ
+function puntuarMatrizCuadrada(matriz) {
+    const filas = matriz.length;
+  
+    let puntaje = 0;
+  
+    // Revisar filas
+    for (let i = 0; i < filas; i++) {
+      const valorFila = matriz[i][0];
+      let filaIgual = true;
+  
+      for (let j = 1; j < filas; j++) {
+        if (matriz[i][j] !== valorFila) {
+          filaIgual = false;
+          break;
+        }
+      }
+  
+      if (filaIgual) {
+        puntaje++;
+      }
+    }
+  
+    // Revisar diagonales
+    const diagonalPrincipal = [];
+    const diagonalSecundaria = [];
+  
+    for (let i = 0; i < filas; i++) {
+      diagonalPrincipal.push(matriz[i][i]);
+      diagonalSecundaria.push(matriz[filas - i - 1][i]);
+    }
+  
+    puntaje += puntuarFila(diagonalPrincipal)*3;
+    puntaje += puntuarFila(diagonalSecundaria)*3;
+  
+    // Revisar columnas
+    for (let i = 0; i < filas; i++) {
+      const columna = [];
+  
+      for (let j = 0; j < filas; j++) {
+        columna.push(matriz[j][i]);
+      }
+      //evalua con i = 0 ojo
+      puntaje += puntuarFila(columna);
+    }
+  
+    return puntaje;
+  }
+  
+  // Función auxiliar para puntuar una fila
+  function puntuarFila(fila) {
+    const valorFila = fila[0];
+    let filaIgual = true;
+  
+    for (let i = 1; i < fila.length; i++) {
+      if (fila[i] !== valorFila) {
+        filaIgual = false;
+        break;
+      }
+    }
+  
+    return filaIgual ? 1 : 0;
+  }
+
+//TURNOS BINGO
 btnGen.addEventListener('click', function() {
+
     pulsacionesRestantes--;
     generarNumero();
     for (k=0;k<4;k++){
+        //agarra ek primer jug del dicc y va pasando
         var jugador = jugadores[k]
+        //agarra el carton del jugador seleccionado y lo itera todo en busqueda de que consiga el numero generado por bingo
         for (j=0; j<jugador.carton.length; j++){
+            //si consigue el numero lo pone 0
             if(jugador.carton[j]==numerosBingo[i]){
                 jugador.carton[j] = 0;
-                j=jugador.carton.length;
                 document.querySelector('.game').innerHTML = "";
-                cartonGen(jugador.carton);
                 h3Element.textContent = jugador.nombre;
-                labelElement.textContent = "puntaje:"+jugador.puntaje;               
+                cartonGen(jugador.carton);
+                //actualizamos puntaje
+                puntRondaJug = puntuarMatrizCuadrada(convListaMat(jugador.carton,multCarton.value))
+                jugador.puntaje = puntRondaJug;
+                labelElement.textContent = "puntaje:"+jugador.puntaje;
+                break
+            }
         }
-    }   
- }
+    }
+
+
+
  i--;
 });
 
@@ -314,16 +308,18 @@ function cartonGen(lista){
 
 //CAMBIAR SELECCION DE CARTONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 numCarton.addEventListener("change", (event) => {
-  var selVal = event.target.value;
-  if (selVal!=4){
-    nomJug = jugadores[selVal].nombre
-    carJug = jugadores[selVal].carton;
-    window.alert(carJug);
-    //limpiamos el div de clase game
-    document.querySelector('.game').innerHTML = "";
-    cartonGen(carJug);
-    h3Element.textContent = nomJug;
-    }
+    cartonBingo.classList.remove("oculto")
+    cartonBingo.classList.add("visible");
+    var selVal = event.target.value;
+    if (selVal!=4){
+        nomJug = jugadores[selVal].nombre
+        carJug = jugadores[selVal].carton;
+        //limpiamos el div de clase game
+        document.querySelector('.game').innerHTML = "";
+        cartonGen(carJug);
+        h3Element.textContent = nomJug;
+        labelElement.textContent = "puntaje:"+jugadores[selVal].puntaje;
+        }
 }
 
 );
