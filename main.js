@@ -1,5 +1,8 @@
 const botonComenzar = document.getElementById("botonComenzar");
 const h3Element = document.querySelector("h3");
+const labelElement = document.getElementById("puntajeJug");
+
+
 
 
 //mult tamano de carton con querySel
@@ -97,6 +100,72 @@ var jugadores = [];
 var nombresJugadores = [];
 var Cartones = [];
 
+//funcion que pasa un array a una lista:
+function convListaMat(lista,multCarton) {
+
+    const matriz = [];
+    for (let i = 0; i < multCarton; i++) {
+      matriz[i] = [];
+      for (let j = 0; j < multCarton; j++) {
+        matriz[i][j] = lista[(i * multCarton) + j];
+      }
+    }
+  
+    return matriz;
+  }
+
+//funcion que me devuelve una lista con todas las filas de una matriz sin importar size
+function obtenerFilasMatriz(matriz) {
+
+    const filas = [];
+    for (const fila of matriz) {
+      filas.push(fila);
+    }
+  
+    return filas;
+}
+
+//funcion que me devuelve una lista con todas las columnas de una matriz 
+function obtenerColumnasMatriz(matriz) {
+  
+    const filas = matriz.length;
+    const columnas = [];
+  
+    // Recorrer las columnas
+    for (let i = 0; i < filas; i++) {
+      columnas.push([]);
+  
+      // Recorrer las filas de la columna actual
+      for (let j = 0; j < filas; j++) {
+        columnas[i].push(matriz[j][i]);
+      }
+    }
+  
+    return columnas;
+
+  }
+
+//funcion que me devuelve lista con todas las diagonales de una matriz 
+function obtenerDiagMat(matriz){
+
+    const filas = matriz.length;
+    const columnas = matriz[0].length;
+    const diagonalPrincipal = [];
+    const diagonalSecundaria = [];
+  
+    // Diagonal principal
+    for (let i = 0; i < filas ; i++) {
+      diagonalPrincipal.push(matriz[i][i]);
+    }
+  
+    // Diagonal secundaria
+    for (let i = 0; i < filas; i++) {
+      diagonalSecundaria.push(matriz[i][columnas - 1 - i]);
+    }
+  
+    return [diagonalPrincipal, diagonalSecundaria];
+  }
+
 
 //este boton guardara en una lista los nombres de los jugadores, guardara en un diccionario los datos de cada jugador, mostrara los objetos a mostrar despues de presionar el boton de comenzar,
 //y se guardara en una variable la lista de listas de los cartones
@@ -104,38 +173,62 @@ botonComenzar.addEventListener('click', function() {
     nombresJugadores = obtenerNombres()
     window.alert(nombresJugadores);
     Cartones = generarCartones();
+    window.alert(Cartones[0])
+    window.alert(convListaMat(Cartones[0],multCarton.value)[1])
+
+
     jugadores = [
         {
           nombre: nombresJugadores[0],
           partidas: 0,
           victorias: 0,
           puntaje: 0,
-          carton:Cartones[0]
+          carton: Cartones[0],
+          filas: filasJug1 = obtenerFilasMatriz(convListaMat(Cartones[0],multCarton.value)),
+          columnas: colJug1 = obtenerColumnasMatriz(convListaMat(Cartones[0],multCarton.value)),
+          diagonales: diagJug1 = obtenerDiagMat(convListaMat(Cartones[0],multCarton.value)),
         },
         {
           nombre: nombresJugadores[1],
           partidas: 0,
           victorias: 0,
           puntaje: 0,
-          carton: Cartones[1]
+          carton: Cartones[1],
+          filas: filasJug2 =  obtenerFilasMatriz(convListaMat(Cartones[1],multCarton.value)),
+          columnas: colJug2 = obtenerColumnasMatriz(convListaMat(Cartones[1],multCarton.value)),
+          diagonales: diagJug2 = obtenerDiagMat(convListaMat(Cartones[1],multCarton.value)),
         },
         {
             nombre: nombresJugadores[2],
             partidas: 0,
             victorias: 0,
             puntaje: 0,
-            carton:Cartones[2]
+            carton:Cartones[2],
+            filas: filasJug3 = obtenerFilasMatriz(convListaMat(Cartones[2],multCarton.value)),
+            columnas: colJug3 = obtenerColumnasMatriz(convListaMat(Cartones[2],multCarton.value)),
+            diagonales: diagJug3 = obtenerDiagMat(convListaMat(Cartones[2],multCarton.value)),
         },
         {
             nombre: nombresJugadores[3],
             partidas: 0,
             victorias: 0,
             puntaje: 0,
-            carton: Cartones[3]
+            carton: Cartones[3],
+            filas: filasJug4 = obtenerFilasMatriz(convListaMat(Cartones[3],multCarton.value)),
+            columnas: colJug4 = obtenerColumnasMatriz(convListaMat(Cartones[3],multCarton.value)),
+            diagonales: diagJug4 = obtenerDiagMat(convListaMat(Cartones[3],multCarton.value)),
         },
         
       ]
-      mostrar()
+      mostrar();
+      /*window.alert(jugadores[0].carton)
+      window.alert(jugadores[0].filas)
+      window.alert(jugadores[0].columnas)
+      window.alert(jugadores[0].diagonales)
+      window.alert(jugadores[3].carton)
+      window.alert(jugadores[3].filas)
+      window.alert(jugadores[3].columnas)
+      window.alert(jugadores[3].diagonales)*/
 
       
     }
@@ -171,12 +264,11 @@ btnGen.addEventListener('click', function() {
                 document.querySelector('.game').innerHTML = "";
                 cartonGen(jugador.carton);
                 h3Element.textContent = jugador.nombre;
-            }
+                labelElement.textContent = "puntaje:"+jugador.puntaje;               
         }
-    }
-
-    i--;
-    
+    }   
+ }
+ i--;
 });
 
 
