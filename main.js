@@ -1,6 +1,6 @@
 const botonComenzar = document.getElementById("botonComenzar");
 
-//mult tamano de carton con querysel
+//mult tamano de carton con querySel
 multCarton = document.getElementById("form-jugadores").querySelector("#tamano-carton");
 
 //ocultar "objetos" pag mostrada inicialmente
@@ -31,6 +31,7 @@ function obtenerNombres(){
 const btnGen = document.getElementById("btn-generar-numero");
 const numGen = document.getElementById("numero-generado");
 const cartones = document.getElementById("cartones-container");
+const cartonBingo = document.getElementById("cartonBingo")
 
 //mostrar "objetos" despues de comenzar la partida
 function mostrar(){   
@@ -40,6 +41,9 @@ function mostrar(){
     numGen.classList.add("visible");
     cartones.classList.remove("oculto")
     cartones.classList.add("visible");
+    cartonBingo.classList.remove("oculto")
+    cartonBingo.classList.add("visible");
+
     return false;
 }
 
@@ -86,55 +90,62 @@ function generarNumerosBingo(){
 
 var numerosBingo = generarNumerosBingo();
 
+//Definimos las variables que deseamos guardar despues de presionar el boton de comenzar
+var jugadores = [];
+var nombresJugadores = [];
+var Cartones = [];
+
+
 //este boton guardara en una lista los nombres de los jugadores, guardara en un diccionario los datos de cada jugador, mostrara los objetos a mostrar despues de presionar el boton de comenzar,
 //y se guardara en una variable la lista de listas de los cartones
 botonComenzar.addEventListener('click', function() {
     nombresJugadores = obtenerNombres()
     window.alert(nombresJugadores);
-    var jugadores = [
+    Cartones = generarCartones();
+    jugadores = [
         {
           nombre: nombresJugadores[0],
           partidas: 0,
           victorias: 0,
-          puntaje: 0
+          puntaje: 0,
+          carton:Cartones[0]
         },
         {
           nombre: nombresJugadores[1],
           partidas: 0,
           victorias: 0,
-          puntaje: 0
+          puntaje: 0,
+          carton: Cartones[1]
         },
         {
             nombre: nombresJugadores[2],
             partidas: 0,
             victorias: 0,
-            puntaje: 0
+            puntaje: 0,
+            carton:Cartones[2]
         },
         {
             nombre: nombresJugadores[3],
             partidas: 0,
             victorias: 0,
-            puntaje: 0
+            puntaje: 0,
+            carton: Cartones[3]
         },
         
       ]
-      //window.alert(jugadores[0].nombre);
       mostrar()
-      Cartones = generarCartones();
-      window.alert(numerosBingo)
-      window.alert(Cartones[0]);
-      window.alert(Cartones[1]);
-      window.alert(Cartones[2]);
-      window.alert(Cartones[3]);
+
       
+    }
     
-});
+);
 
 
 var i = 24
 var pulsacionesRestantes = 25;
 
-//esta es la funcion que se llamara cada vez que el usuario presione generar numero, que a su vez mostrara el numero generado y se podra pulsar un max de 25 veces
+//esta es la funcion que se llamara cada vez que el usuario presione generar numero, 
+//que a su vez mostrara el numero generado y se podra pulsar un max de 25 veces
 function generarNumero() {
   if (pulsacionesRestantes > 0) {   
     numGen.textContent = numerosBingo[i];
@@ -146,14 +157,83 @@ function generarNumero() {
 }
 
 
-btnGen.addEventListener('click', function() {
 
+//TURNOS BINGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO//
+btnGen.addEventListener('click', function() {
     pulsacionesRestantes--;
     generarNumero();
+    for (i=0;i<4;i++){
+        var jugador = jugadores[i]
+        for (j=0; j<jugador.carton.length; j++){
+            if(jugador.carton[j]==numerosBingo[i]){
+                jugador.carton[j] = 0;
+                j=jugador.carton.length;
+            }
+        }
+    }
+    
     i--;
     
 });
 
+
+const numCarton = document.getElementById("cartonJugador");
+
+//Definimos variables cuyo valor deseamos guardar
+//nombre del jugador seleccionado en el select
+var nomJug="";
+var carJug = [];
+
+
+//funcion que crea carton
+function cartonGen(lista){
+    if (lista.length == 9){
+        for(var i = 0; i < lista.length; i++ ){
+            let box = document.createElement('div')
+            box.className =  'item1';
+            box.innerHTML = lista[i];
+            document.querySelector('.game').appendChild(box);
+        }
+    };
+    if(lista.length == 16){
+        for(var i = 0; i < lista.length; i++ ){
+            let box = document.createElement('div')
+            box.className =  'item2';
+            box.innerHTML = lista[i];
+            document.querySelector('.game').appendChild(box);
+        }
+    };
+    if(lista.length == 25){
+        for(var i = 0; i < lista.length; i++ ){
+            let box = document.createElement('div')
+            box.className =  'item3';
+            box.innerHTML = lista[i];
+            document.querySelector('.game').appendChild(box);
+        }
+    }
+}
+
+
+
+//event listener para obtener numero del jugador seleccionado y mostrar su carton
+
+//CAMBIAR SELECCION DE CARTONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+numCarton.addEventListener("change", (event) => {
+  var selVal = event.target.value;
+  if (selVal!=4){
+    nomJug = jugadores[selVal].nombre
+    carJug = jugadores[selVal].carton;
+    window.alert(carJug);
+    //limpiamos el div de clase game
+    document.querySelector('.game').innerHTML = "";
+    cartonGen(carJug);
+    }
+}
+
+);
+
+
+    
 
 
 
