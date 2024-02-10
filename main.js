@@ -1,4 +1,6 @@
 const botonComenzar = document.getElementById("botonComenzar");
+const h3Element = document.querySelector("h3");
+
 
 //mult tamano de carton con querySel
 multCarton = document.getElementById("form-jugadores").querySelector("#tamano-carton");
@@ -156,22 +158,23 @@ function generarNumero() {
   }
 }
 
-
-
 //TURNOS BINGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO//
 btnGen.addEventListener('click', function() {
     pulsacionesRestantes--;
     generarNumero();
-    for (i=0;i<4;i++){
-        var jugador = jugadores[i]
+    for (k=0;k<4;k++){
+        var jugador = jugadores[k]
         for (j=0; j<jugador.carton.length; j++){
             if(jugador.carton[j]==numerosBingo[i]){
                 jugador.carton[j] = 0;
                 j=jugador.carton.length;
+                document.querySelector('.game').innerHTML = "";
+                cartonGen(jugador.carton);
+                h3Element.textContent = jugador.nombre;
             }
         }
     }
-    
+
     i--;
     
 });
@@ -227,6 +230,7 @@ numCarton.addEventListener("change", (event) => {
     //limpiamos el div de clase game
     document.querySelector('.game').innerHTML = "";
     cartonGen(carJug);
+    h3Element.textContent = nomJug;
     }
 }
 
