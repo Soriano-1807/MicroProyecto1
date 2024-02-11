@@ -8,7 +8,7 @@
 <body>
   <div id="main-container">
     <h1>¡Bienvenido al Bingo!</h1>
-    <div id="form-container" class = "visible">
+    <div id="form-container" class = "visible" >
       <h2>Ingresa tu nombre y selecciona la cantidad de cartones:</h2>
       <form id="form-jugadores" class="visible" onsubmit="return ocultar()">
         <label for="nombre-jugador-1">Jugador 1:</label>
@@ -52,6 +52,10 @@
       </div>
 
     </div>
+    <div>
+      <button id = "terminar" class = "oculto" onclick = "window.location.reload()">Terminar Partida</button>
+    </div>
+    
   </div>
   <script src="main.js"></script>
 </body>

@@ -1,6 +1,7 @@
 const botonComenzar = document.getElementById("botonComenzar");
 const h3Element = document.querySelector("h3");
 const labelElement = document.getElementById("puntajeJug");
+const btnTerminar = document.getElementById("terminar")
 
 
 
@@ -46,6 +47,8 @@ function mostrar(){
     numGen.classList.add("visible");
     cartones.classList.remove("oculto")
     cartones.classList.add("visible");
+    btnTerminar.classList.remove("oculto");
+    btnTerminar.classList.add("visible")
 
     return false;
 }
@@ -121,28 +124,24 @@ botonComenzar.addEventListener('click', function() {
     jugadores = [
         {
           nombre: nombresJugadores[0],
-          partidas: 0,
           victorias: 0,
           puntaje: 0,
           carton: Cartones[0],
         },
         {
           nombre: nombresJugadores[1],
-          partidas: 0,
           victorias: 0,
           puntaje: 0,
           carton: Cartones[1],
         },
         {
             nombre: nombresJugadores[2],
-            partidas: 0,
             victorias: 0,
             puntaje: 0,
             carton:Cartones[2],
         },
         {
             nombre: nombresJugadores[3],
-            partidas: 0,
             victorias: 0,
             puntaje: 0,
             carton: Cartones[3],
@@ -164,7 +163,7 @@ var pulsacionesRestantes = 25;
 function generarNumero() {
   if (pulsacionesRestantes > 0) {   
     numGen.textContent = numerosBingo[i];
-    btnGen.textContent = pulsacionesRestantes;
+    btnGen.textContent = "Turnos Restantes: " + pulsacionesRestantes;
 
   } else {
     btnGen.textContent = "Turnos Agotados";
@@ -247,7 +246,7 @@ btnGen.addEventListener('click', function() {
         for (j=0; j<jugador.carton.length; j++){
             //si consigue el numero lo pone 0
             if(jugador.carton[j]==numerosBingo[i]){
-                jugador.carton[j] = 0;
+                jugador.carton[j] = "X";
                 document.querySelector('.game').innerHTML = "";
                 h3Element.textContent = jugador.nombre;
                 cartonGen(jugador.carton);
@@ -306,7 +305,7 @@ function cartonGen(lista){
 
 //event listener para obtener numero del jugador seleccionado y mostrar su carton
 
-//CAMBIAR SELECCION DE CARTONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+//CAMBIAR SELECCION DE CARTON
 numCarton.addEventListener("change", (event) => {
     cartonBingo.classList.remove("oculto")
     cartonBingo.classList.add("visible");
@@ -324,7 +323,110 @@ numCarton.addEventListener("change", (event) => {
 
 );
 
+//funcion para saber quien es el que mas puntaje obtuvo (victoria)
+function obtenerPosicionPuntajeMasAlto(listaJugadores) {
+    // Inicializar variables
+    let indiceJugadorConMayorPuntaje = 0;
+    let puntajeMaximo = listaJugadores[0].puntaje;
+  
+    // Recorrer la lista de jugadores
+    for (let i = 1; i < listaJugadores.length; i++) {
+      const jugadorActual = listaJugadores[i];
+  
+      // Si el puntaje del jugador actual es mayor que el puntaje máximo
+      if (jugadorActual.puntaje > puntajeMaximo) {
+        // Actualizar el índice del jugador con mayor puntaje y el puntaje máximo
+        indiceJugadorConMayorPuntaje = i;
+        puntajeMaximo = jugadorActual.puntaje;
+      }
+    }
+  
+    // Retornar la posición del jugador con el puntaje máximo
+    return indiceJugadorConMayorPuntaje ;
+  }
 
+
+
+//diccionario pa localstorage
+
+const players = {
+    jugador1: {
+      nombre: Jugador1,
+      victorias: 0,
+      puntaje: 0
+    },
+    jugador2: {
+      nombre: Jugador2,
+      victorias: 0,
+      puntaje: 0
+    },
+    jugador3: {
+      nombre: Jugador3,
+      victorias: 0,
+      puntaje: 0
+    },
+    jugador4: {
+      nombre: Jugador4,
+      victorias: 0,
+      puntaje: 0
+    }
+  };
+
+const playersJSON = JSON.stringify(players);
+localStorage.setItem("diccionarioJugadores", playersJSON);
+
+const diccionarioJSON = localStorage.getItem("diccionarioJugadores");
+const diccionario = JSON.parse(diccionarioJSON);
+
+for (const jugador in diccionario) {
+    const nombre = diccionario[jugador][nombre];
+    const puntaje = diccionario[jugador]["puntaje"];
+  
+    // Crear una nueva fila
+    const fila = document.createElement("tr");
+  
+    // Agregar celdas a la fila
+    const celdaNombre = document.createElement("td");
+    celdaNombre.textContent = nombre;
+    const celdaPuntaje = document.createElement("td");
+    celdaPuntaje.textContent = puntaje;
+  
+    fila.appendChild(celdaNombre);
+    fila.appendChild(celdaPuntaje);
+  
+    // Agregar la fila al cuerpo de la tabla
+    document.querySelector("tbody").appendChild(fila);
+  }
+
+  const tabla = document.querySelector("table");
+  tabla.style.display = "block";
+
+
+btnTerminar.addEventListener('click', function() {
+    const diccionarioJSON = localStorage.getItem("diccionarioJugadores");
+    const diccionario = JSON.parse(diccionarioJSON);
+    var posJugVic = obtenerPosicionPuntajeMasAlto(jugadores);
+    if (posJugVic == 0){
+        diccionario["jugador1"]["victorias"]+= 1;
+    }
+    else if (posJugVic == 1){
+        diccionario["jugador2"]["victorias"]+= 1;
+    }
+    else if(posJugVic == 2){
+        diccionario["jugador3"]["victorias"]+= 1;
+    }
+    else{
+        diccionario["jugador4"]["victorias"]+= 1;
+    }
+    diccionario["jugador1"]["puntaje"]+= jugadores[0].puntaje ;
+    diccionario["jugador2"]["puntaje"]+= jugadores[1].puntaje ;
+    diccionario["jugador3"]["puntaje"]+= jugadores[2].puntaje ;
+    diccionario["jugador4"]["puntaje"]+= jugadores[3].puntaje ;
+    const diccionarioModificadoJSON = JSON.stringify(diccionario);
+    localStorage.setItem("diccionarioJugadores", diccionarioModificadoJSON);
+
+
+});
     
 
 
